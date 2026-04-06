@@ -130,9 +130,9 @@ const calculator = (answers) => {
   } else if (carbonTonnes < 0.8) {
     category = "medio";
   } else if (carbonTonnes < 1.5) {
-    category = "medio-alto";
-  } else {
     category = "alto";
+  } else {
+    category = "muy alto";
   }
 
   return {
