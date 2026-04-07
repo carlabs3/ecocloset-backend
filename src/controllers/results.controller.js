@@ -78,7 +78,7 @@ const getStats = async (req, res) => {
     if (results.length === 0) {
       return res.status(200).json({
         totalTests: 0,
-        avgCarbon: 0.5,
+        avgCarbon: 500,
         avgWater: 400000,
       });
     }
@@ -87,7 +87,7 @@ const getStats = async (req, res) => {
     const avgCarbon = parseFloat(
       (
         results.reduce((sum, r) => sum + r.carbonFootprint, 0) / totalTests
-      ).toFixed(3),
+      ).toFixed(1),
     );
     const avgWater = Math.round(
       results.reduce((sum, r) => sum + r.waterFootprint, 0) / totalTests,
@@ -99,6 +99,31 @@ const getStats = async (req, res) => {
   }
 };
 
+const updateResult = async (req, res) => {
+  try {
+    const { answers } = req.body;
+    const { carbonKg, waterLitres, category } = calculator(answers);
+
+    const updated = await Result.findOneAndUpdate(
+      { _id: req.params.id, userId: req.userId },
+      {
+        answers,
+        carbonFootprint: carbonKg,
+        waterFootprint: waterLitres,
+        category,
+      },
+      { new: true },
+    );
+
+    if (!updated) return res.status(404).json({ message: "No encontrado" });
+    res.status(200).json(updated);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error al actualizar", error: error.message });
+  }
+};
+
 module.exports = {
   createResult,
   calculateOnly,
@@ -106,4 +131,5 @@ module.exports = {
   getResultById,
   deleteResult,
   getStats,
+  updateResult,
 };
