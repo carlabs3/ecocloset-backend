@@ -17,12 +17,12 @@ const calculateOnly = async (req, res) => {
 const createResult = async (req, res) => {
   try {
     const { answers } = req.body;
-    const { carbonTonnes, waterLitres, category } = calculator(answers);
+    const { carbonKg, waterLitres, category } = calculator(answers);
 
     const result = await Result.create({
       userId: req.userId,
       answers,
-      carbonFootprint: carbonTonnes,
+      carbonFootprint: carbonKg,
       waterFootprint: waterLitres,
       category,
     });

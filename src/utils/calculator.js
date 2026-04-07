@@ -120,23 +120,23 @@ const calculator = (answers) => {
   }
 
   // Convertir CO₂ a toneladas
-  const carbonTonnes = parseFloat((carbon / 1000).toFixed(3));
+  const carbonKg = Math.round(carbon);
   const waterLitres = Math.round(water);
 
   // Categoría según niveles del test
   let category;
-  if (carbonTonnes < 0.4) {
+  if (carbonKg < 400) {
     category = "bajo";
-  } else if (carbonTonnes < 0.8) {
+  } else if (carbonKg < 800) {
     category = "medio";
-  } else if (carbonTonnes < 1.5) {
+  } else if (carbonKg < 1500) {
     category = "alto";
   } else {
     category = "muy alto";
   }
 
   return {
-    carbonTonnes,
+    carbonKg,
     waterLitres,
     category,
   };
